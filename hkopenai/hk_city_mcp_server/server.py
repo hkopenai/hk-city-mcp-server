@@ -18,6 +18,7 @@ def create_mcp_server():
         return tool_ambulance_service.get_ambulance_indicators(start_year, end_year)
 
     return mcp
+
 def main():
     parser = argparse.ArgumentParser(description='HKO MCP Server')
     parser.add_argument('-s', '--sse', action='store_true',
