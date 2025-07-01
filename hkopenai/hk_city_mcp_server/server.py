@@ -29,7 +29,7 @@ def main():
     
     if args.sse:
         server.run(transport="streamable-http")
-        print("HKO MCP Server running in SSE mode on port 8000")
+        print(f"[DEBUG] Server started in SSE mode on port 8000")
     else:
         server.run()
         print("HKO MCP Server running in stdio mode")
