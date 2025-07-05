@@ -1,3 +1,9 @@
+"""
+Module for creating and running the HK City MCP Server.
+
+This module provides functionality to configure and start the MCP server for HK OpenAI city data.
+"""
+
 import argparse
 from fastmcp import FastMCP
 from hkopenai.hk_city_mcp_server import tool_ambulance_service
@@ -22,6 +28,12 @@ def create_mcp_server():
 
 
 def main():
+    """
+    Main function to run the HKO MCP Server.
+    
+    Parses command line arguments to determine the mode of operation (SSE or stdio)
+    and starts the server accordingly.
+    """
     parser = argparse.ArgumentParser(description="HKO MCP Server")
     parser.add_argument(
         "-s", "--sse", action="store_true", help="Run in SSE mode instead of stdio"

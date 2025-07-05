@@ -1,3 +1,9 @@
+"""
+Module for creating decorators used in the HK City MCP Server.
+
+This module provides decorators to register and manage tools for the MCP server.
+"""
+
 def create_tool_registry():
     """Create a tool registry decorator that tracks decorated functions by name.
 

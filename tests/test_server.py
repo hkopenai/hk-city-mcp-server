@@ -1,12 +1,30 @@
+"""
+Module for testing the MCP server creation and functionality.
+
+This module contains unit tests for the server creation process and tool registration.
+"""
+
 import unittest
 from unittest.mock import patch, Mock
 from hkopenai.hk_city_mcp_server.server import create_mcp_server
 
 
 class TestApp(unittest.TestCase):
+    """
+    Test class for verifying MCP server creation and tool functionality.
+    
+    This class contains test cases to ensure the server is created correctly and
+    tools are properly registered and callable.
+    """
     @patch("hkopenai.hk_city_mcp_server.server.FastMCP")
     @patch("hkopenai.hk_city_mcp_server.server.tool_ambulance_service")
     def test_create_mcp_server(self, mock_tool_ambulance_service, mock_fastmcp):
+        """
+        Test the creation of the MCP server and tool registration.
+        
+        This test verifies that the server is created correctly, tools are registered
+        using the decorator, and the tools call the underlying functions as expected.
+        """
         # Setup mocks
         mock_server = Mock()
 

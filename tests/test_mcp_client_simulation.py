@@ -1,3 +1,10 @@
+"""
+Module for testing MCP client simulation with live server interaction.
+
+This module contains unit tests for simulating client interactions with the MCP server,
+specifically testing tool calls and server communication over HTTP.
+"""
+
 import unittest
 import subprocess
 import json
@@ -8,6 +15,10 @@ import asyncio
 import socket
 import logging
 from datetime import datetime, timedelta
+from mcp.client.streamable_http import (
+    streamablehttp_client,
+)  # Added for MCP SDK communication
+from mcp import ClientSession
 
 # Configure logging
 log_level = os.environ.get("LOG_LEVEL", "INFO").upper()
@@ -16,10 +27,6 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
-from mcp.client.streamable_http import (
-    streamablehttp_client,
-)  # Added for MCP SDK communication
-from mcp import ClientSession
 
 
 @unittest.skipUnless(
@@ -27,6 +34,12 @@ from mcp import ClientSession
     "Set RUN_LIVE_TESTS=true to run live tests",
 )
 class TestMCPClientSimulation(unittest.TestCase):
+    """
+    Test class for MCP client simulation with live server interaction.
+    
+    This class contains test cases for simulating client interactions with the MCP server,
+    testing tool calls and server communication over HTTP.
+    """
     server_process = None
     SERVER_URL = "http://127.0.0.1:8000/mcp/"  # Updated server URL for MCP API
 
@@ -121,6 +134,12 @@ class TestMCPClientSimulation(unittest.TestCase):
                 return data
 
     def test_get_ambulance_indicators_tool(self):
+        """
+        Test the 'get_ambulance_indicators' tool functionality.
+        
+        This test checks if the tool can be called successfully and returns data
+        in the expected format without errors.
+        """
         logger.debug("Testing 'get_ambulance_indicators' tool...")
         asyncio.run(
             self._call_tool_and_assert(

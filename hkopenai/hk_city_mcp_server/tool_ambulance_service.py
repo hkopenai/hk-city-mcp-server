@@ -1,3 +1,9 @@
+"""
+Module for fetching and processing ambulance service data in Hong Kong.
+
+This module provides tools to retrieve and filter ambulance service indicators from the Fire Services Department.
+"""
+
 import urllib.request
 import csv
 from io import StringIO
