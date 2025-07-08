@@ -18,7 +18,7 @@ repository = "https://github.com/hkopenai/hk-city-mcp-server.git"
 [project]
 name = "hkopenai.hk_city_mcp_server"
 version = "0.1.8"
-description = "Hong Kong City MCP Server providing city data tools"
+description = "Hong Kong city data MCP Server providing city-related data tools"
 readme = "README.md"
 requires-python = ">=3.7"
 authors = [
@@ -30,7 +30,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "fastmcp>=0.1.0",
+    "fastmcp>=2.10.2",
     "requests>=2.31.0",
     "pytest>=8.2.0",
     "pytest-cov>=6.1.1",
@@ -43,10 +43,7 @@ dependencies = [
 hk_city_mcp_server = "hkopenai.hk_city_mcp_server.app:main"
 
 [tool.pytest.ini_options]
-python_files = "test_*.py"
-python_classes = "Test*"
-python_functions = "test_*"
-
+asyncio_default_fixture_loop_scope = "function"
 markers = [
     "live: marks tests as live (external API calls)",
 ]
