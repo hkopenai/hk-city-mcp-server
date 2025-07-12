@@ -4,11 +4,9 @@ Module for creating and running the HK City MCP Server.
 This module provides functionality to configure and start the MCP server for HK OpenAI city data.
 """
 
-import argparse
 from fastmcp import FastMCP
-from typing import Dict, List, Annotated, Optional
+
 import hkopenai.hk_city_mcp_server.tool_ambulance_service
-from pydantic import Field
 
 
 def create_mcp_server():

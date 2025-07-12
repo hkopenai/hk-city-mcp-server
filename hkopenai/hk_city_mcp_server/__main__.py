@@ -6,8 +6,9 @@ It handles command-line arguments and initiates the main server functionality.
 """
 
 import argparse
-from hkopenai.hk_city_mcp_server.server import main
 import os
+
+from hkopenai.hk_city_mcp_server.server import main
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="HK City MCP Server")
@@ -35,3 +36,4 @@ if __name__ == "__main__":
         args.port = int(os.environ.get("PORT"))
 
     main(args)
+

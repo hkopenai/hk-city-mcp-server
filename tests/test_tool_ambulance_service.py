@@ -5,8 +5,10 @@ This module contains unit tests for fetching and filtering ambulance service dat
 """
 
 import unittest
-from hkopenai.hk_city_mcp_server.tool_ambulance_service import _get_ambulance_indicators
 from unittest.mock import patch, MagicMock
+
+from hkopenai.hk_city_mcp_server.tool_ambulance_service import _get_ambulance_indicators
+from hkopenai.hk_city_mcp_server.tool_ambulance_service import register
 
 
 class TestAmbulanceService(unittest.TestCase):
@@ -63,8 +65,6 @@ class TestAmbulanceService(unittest.TestCase):
         mock_mcp = MagicMock()
 
         # Call the register function
-        from hkopenai.hk_city_mcp_server.tool_ambulance_service import register
-
         register(mock_mcp)
 
         # Verify that mcp.tool was called with the correct description

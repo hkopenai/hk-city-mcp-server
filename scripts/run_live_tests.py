@@ -1,9 +1,18 @@
+"""
+Module for running live tests with pytest.
+"""
+
 import os
 import subprocess
 import sys
 
 
 def run_live_tests(test_name=None):
+    """
+    Run live tests with pytest, setting the RUN_LIVE_TESTS environment variable.
+    If test_name is provided, only the specified test will be run.
+    Otherwise, all live test files (with '_live' in the name) will be run.
+    """
     """
     Run live tests with pytest, setting the RUN_LIVE_TESTS environment variable.
     If test_name is provided, only the specified test will be run.
@@ -42,13 +51,13 @@ def run_live_tests(test_name=None):
 
 
 if __name__ == "__main__":
-    test_name = None
+    TEST_NAME = None
     if len(sys.argv) > 1:
-        test_name = sys.argv[1]
-        print(f"Running specific live test: {test_name}")
+        TEST_NAME = sys.argv[1]
+        print(f"Running specific live test: {TEST_NAME}")
     else:
         print(
             "Running all live tests. To run a specific test, provide the test name as an argument."
         )
 
-    exit(run_live_tests(test_name))
+    sys.exit(run_live_tests(TEST_NAME))
