@@ -12,14 +12,15 @@ from unittest.mock import patch, MagicMock
 class TestAmbulanceService(unittest.TestCase):
     """
     Test class for verifying ambulance service indicators functionality.
-    
+
     This class contains test cases to ensure the data fetching and filtering
     for ambulance service indicators work as expected.
     """
+
     def test_get_ambulance_indicators(self):
         """
         Test the retrieval and filtering of ambulance service indicators.
-        
+
         This test verifies that the function correctly filters data by year range,
         returns empty results for non-matching years, and handles partial year matches.
         """
@@ -54,35 +55,38 @@ class TestAmbulanceService(unittest.TestCase):
     def test_register_tool(self):
         """
         Test the registration of the get_ambulance_indicators tool.
-        
+
         This test verifies that the register function correctly registers the tool
         with the FastMCP server and that the registered tool calls the underlying
         _get_ambulance_indicators function.
         """
         mock_mcp = MagicMock()
-        
+
         # Call the register function
         from hkopenai.hk_city_mcp_server.tool_ambulance_service import register
+
         register(mock_mcp)
-        
+
         # Verify that mcp.tool was called with the correct description
         mock_mcp.tool.assert_called_once_with(
             description="Ambulance Service Indicators (Provisional Figures) in Hong Kong"
         )
-        
+
         # Get the mock that represents the decorator returned by mcp.tool
         mock_decorator = mock_mcp.tool.return_value
-        
+
         # Verify that the mock decorator was called once (i.e., the function was decorated)
         mock_decorator.assert_called_once()
-        
+
         # The decorated function is the first argument of the first call to the mock_decorator
         decorated_function = mock_decorator.call_args[0][0]
-        
+
         # Verify the name of the decorated function
         self.assertEqual(decorated_function.__name__, "get_ambulance_indicators")
-        
+
         # Call the decorated function and verify it calls _get_ambulance_indicators
-        with patch("hkopenai.hk_city_mcp_server.tool_ambulance_service._get_ambulance_indicators") as mock_get_ambulance_indicators:
+        with patch(
+            "hkopenai.hk_city_mcp_server.tool_ambulance_service._get_ambulance_indicators"
+        ) as mock_get_ambulance_indicators:
             decorated_function(start_year=2018, end_year=2019)
             mock_get_ambulance_indicators.assert_called_once_with(2018, 2019)

@@ -19,6 +19,7 @@ def create_mcp_server():
 
     return mcp
 
+
 def main(args):
     """
     Main function to run the MCP Server.
@@ -30,7 +31,9 @@ def main(args):
 
     if args.sse:
         server.run(transport="streamable-http", host=args.host, port=args.port)
-        print(f"MCP Server started in SSE mode on port {args.port}, bound to {args.host}")
+        print(
+            f"MCP Server started in SSE mode on port {args.port}, bound to {args.host}"
+        )
     else:
         server.run()
         print("MCP Server running in stdio mode")
