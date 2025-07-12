@@ -17,8 +17,8 @@ class TestApp(unittest.TestCase):
     tools are properly registered and callable.
     """
     @patch("hkopenai.hk_city_mcp_server.server.FastMCP")
-    @patch("hkopenai.hk_city_mcp_server.server.tool_ambulance_service")
-    def test_create_mcp_server(self, mock_tool_ambulance_service, mock_fastmcp):
+    @patch("hkopenai.hk_city_mcp_server.tool_ambulance_service.register")
+    def test_create_mcp_server(self, mock_register, mock_fastmcp):
         """
         Test the creation of the MCP server and tool registration.
         
@@ -38,25 +38,7 @@ class TestApp(unittest.TestCase):
 
         # Verify server creation
         mock_fastmcp.assert_called_once()
-        self.assertEqual(server, mock_server)
-
-        # Verify that the tool decorator was called for each tool function
-        self.assertEqual(mock_server.tool.call_count, 1)
-
-        # Get all decorated functions
-        decorated_funcs = {
-            call.args[0].__name__: call.args[0]
-            for call in mock_server.tool.return_value.call_args_list
-        }
-        self.assertEqual(len(decorated_funcs), 1)
-
-        # Call each decorated function and verify that the correct underlying function is called
-
-        decorated_funcs["get_ambulance_indicators"](start_year=2020, end_year=2021)
-        mock_tool_ambulance_service.get_ambulance_indicators.assert_called_once_with(
-            2020, 2021
-        )
-
+        mock_register.assert_called_once_with(mock_server)
 
 if __name__ == "__main__":
     unittest.main()

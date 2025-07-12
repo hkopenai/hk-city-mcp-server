@@ -12,6 +12,15 @@ from pydantic import Field
 from typing_extensions import Annotated
 from datetime import datetime
 
+def register(mcp):
+    @mcp.tool(
+        description="Ambulance Service Indicators (Provisional Figures) in Hong Kong"
+    )
+    def get_ambulance_indicators(
+        start_year: Annotated[int, Field(description="Start year of data range")],
+        end_year: Annotated[int, Field(description="End year of data range")],
+    ) -> List[Dict]:
+        return _get_ambulance_indicators(start_year, end_year)
 
 def fetch_ambulance_data() -> List[Dict]:
     """Fetch ambulance service data from Fire Services Department"""
@@ -22,7 +31,7 @@ def fetch_ambulance_data() -> List[Dict]:
     return list(reader)
 
 
-def get_ambulance_indicators(
+def _get_ambulance_indicators(
     start_year: Annotated[int, Field(description="Start year of data range")],
     end_year: Annotated[int, Field(description="End year of data range")],
 ) -> List[Dict]:

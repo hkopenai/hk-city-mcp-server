@@ -5,7 +5,7 @@ This module contains unit tests for fetching and filtering ambulance service dat
 """
 
 import unittest
-from hkopenai.hk_city_mcp_server.tool_ambulance_service import get_ambulance_indicators
+from hkopenai.hk_city_mcp_server.tool_ambulance_service import _get_ambulance_indicators
 from unittest.mock import patch, MagicMock
 
 
@@ -38,15 +38,51 @@ class TestAmbulanceService(unittest.TestCase):
             mock_urlopen.return_value = mock_response
 
             # Test filtering by year range
-            result = get_ambulance_indicators(2019, 2019)
+            result = _get_ambulance_indicators(2019, 2019)
             self.assertEqual(len(result), 2)
             self.assertEqual(result[0]["date"], "01/2019")
             self.assertEqual(result[1]["date"], "02/2019")
 
             # Test empty result for non-matching years
-            result = get_ambulance_indicators(2021, 2022)
+            result = _get_ambulance_indicators(2021, 2022)
             self.assertEqual(len(result), 0)
 
             # Test partial year match
-            result = get_ambulance_indicators(2019, 2020)
+            result = _get_ambulance_indicators(2019, 2020)
             self.assertEqual(len(result), 3)
+
+    @patch("hkopenai.hk_city_mcp_server.tool_ambulance_service._get_ambulance_indicators")
+    def test_register_tool(self, mock_get_ambulance_indicators):
+        """
+        Test the registration of the get_ambulance_indicators tool.
+        
+        This test verifies that the register function correctly registers the tool
+        with the FastMCP server and that the registered tool calls the underlying
+        _get_ambulance_indicators function.
+        """
+        mock_mcp = MagicMock()
+        
+        # Call the register function
+        from hkopenai.hk_city_mcp_server.tool_ambulance_service import register
+        register(mock_mcp)
+        
+        # Verify that mcp.tool was called with the correct description
+        mock_mcp.tool.assert_called_once_with(
+            description="Ambulance Service Indicators (Provisional Figures) in Hong Kong"
+        )
+        
+        # Get the mock that represents the decorator returned by mcp.tool
+        mock_decorator = mock_mcp.tool.return_value
+        
+        # Verify that the mock decorator was called once (i.e., the function was decorated)
+        mock_decorator.assert_called_once()
+        
+        # The decorated function is the first argument of the first call to the mock_decorator
+        decorated_function = mock_decorator.call_args[0][0]
+        
+        # Verify the name of the decorated function
+        self.assertEqual(decorated_function.__name__, "get_ambulance_indicators")
+        
+        # Call the decorated function and verify it calls _get_ambulance_indicators
+        decorated_function(start_year=2018, end_year=2019)
+        mock_get_ambulance_indicators.assert_called_once_with(2018, 2019)

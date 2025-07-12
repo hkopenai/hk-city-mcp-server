@@ -6,8 +6,8 @@ This module provides functionality to configure and start the MCP server for HK 
 
 import argparse
 from fastmcp import FastMCP
-from hkopenai.hk_city_mcp_server import tool_ambulance_service
 from typing import Dict, List, Annotated, Optional
+import hkopenai.hk_city_mcp_server.tool_ambulance_service
 from pydantic import Field
 
 
@@ -15,17 +15,9 @@ def create_mcp_server():
     """Create and configure the MCP server"""
     mcp = FastMCP(name="HK OpenAI city Server")
 
-    @mcp.tool(
-        description="Ambulance Service Indicators (Provisional Figures) in Hong Kong"
-    )
-    def get_ambulance_indicators(
-        start_year: Annotated[int, Field(description="Start year of data range")],
-        end_year: Annotated[int, Field(description="End year of data range")],
-    ) -> List[Dict]:
-        return tool_ambulance_service.get_ambulance_indicators(start_year, end_year)
+    hkopenai.hk_city_mcp_server.tool_ambulance_service.register(mcp)
 
     return mcp
-
 
 def main(args):
     """
@@ -42,7 +34,3 @@ def main(args):
     else:
         server.run()
         print("MCP Server running in stdio mode")
-
-
-if __name__ == "__main__":
-    main()
