@@ -45,8 +45,8 @@ def fetch_ambulance_data() -> List[Dict]:
         List of dictionaries, each representing a row of ambulance service data.
     """
     url = "http://www.hkfsd.gov.hk/datagovhk/datasets/Ambulance_Service_Indicators_eng.csv"
-    response = urllib.request.urlopen(url)
-    lines = [l.decode("utf-8-sig") for l in response.readlines()]
+    with urllib.request.urlopen(url) as response:
+        lines = [l.decode("utf-8-sig") for l in response.readlines()]
     reader = csv.DictReader(lines)
     return list(reader)
 

@@ -38,7 +38,7 @@ class TestAmbulanceService(unittest.TestCase):
             mock_response.readlines.return_value = [
                 line.encode("utf-8") for line in mock_csv_data.split("\n")
             ]
-            mock_urlopen.return_value = mock_response
+            mock_urlopen.return_value.__enter__.return_value = mock_response
 
             # Test filtering by year range
             result = _get_ambulance_indicators(2019, 2019)
