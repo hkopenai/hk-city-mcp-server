@@ -51,8 +51,7 @@ class TestAmbulanceService(unittest.TestCase):
             result = _get_ambulance_indicators(2019, 2020)
             self.assertEqual(len(result), 3)
 
-    @patch("hkopenai.hk_city_mcp_server.tool_ambulance_service._get_ambulance_indicators")
-    def test_register_tool(self, mock_get_ambulance_indicators):
+    def test_register_tool(self):
         """
         Test the registration of the get_ambulance_indicators tool.
         
@@ -84,5 +83,6 @@ class TestAmbulanceService(unittest.TestCase):
         self.assertEqual(decorated_function.__name__, "get_ambulance_indicators")
         
         # Call the decorated function and verify it calls _get_ambulance_indicators
-        decorated_function(start_year=2018, end_year=2019)
-        mock_get_ambulance_indicators.assert_called_once_with(2018, 2019)
+        with patch("hkopenai.hk_city_mcp_server.tool_ambulance_service._get_ambulance_indicators") as mock_get_ambulance_indicators:
+            decorated_function(start_year=2018, end_year=2019)
+            mock_get_ambulance_indicators.assert_called_once_with(2018, 2019)
