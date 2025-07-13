@@ -35,5 +35,5 @@ if __name__ == "__main__":
     if os.environ.get("PORT"):
         args.port = int(os.environ.get("PORT"))
 
-    main(args)
+    main(host=args.host, port=args.port, sse=args.sse)
 
