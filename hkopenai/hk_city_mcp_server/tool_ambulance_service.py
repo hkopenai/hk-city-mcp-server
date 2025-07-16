@@ -5,9 +5,9 @@ This module provides tools to retrieve and filter ambulance service indicators f
 """
 
 import csv
-import urllib.request
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, List, Optional
+from hkopenai_common.csv_utils import fetch_csv_from_url
 
 from pydantic import Field
 from typing_extensions import Annotated
@@ -15,6 +15,7 @@ from typing_extensions import Annotated
 
 def register(mcp):
     """Registers the ambulance service tool with the FastMCP server."""
+
     @mcp.tool(
         description="Ambulance Service Indicators (Provisional Figures) in Hong Kong"
     )
@@ -35,22 +36,6 @@ def register(mcp):
         return _get_ambulance_indicators(start_year, end_year)
 
 
-
-
-def fetch_ambulance_data() -> List[Dict]:
-    """
-    Fetch ambulance service data from Fire Services Department.
-
-    Returns:
-        List of dictionaries, each representing a row of ambulance service data.
-    """
-    url = "http://www.hkfsd.gov.hk/datagovhk/datasets/Ambulance_Service_Indicators_eng.csv"
-    with urllib.request.urlopen(url) as response:
-        lines = [l.decode("utf-8-sig") for l in response.readlines()]
-    reader = csv.DictReader(lines)
-    return list(reader)
-
-
 def _get_ambulance_indicators(
     start_year: Annotated[int, Field(description="Start year of data range")],
     end_year: Annotated[int, Field(description="End year of data range")],
@@ -65,7 +50,8 @@ def _get_ambulance_indicators(
     Returns:
         List of monthly ambulance service indicators within the specified year range.
     """
-    data = fetch_ambulance_data()
+    url = "http://www.hkfsd.gov.hk/datagovhk/datasets/Ambulance_Service_Indicators_eng.csv"
+    data = fetch_csv_from_url(url)
     filtered_data = []
 
     for row in data:

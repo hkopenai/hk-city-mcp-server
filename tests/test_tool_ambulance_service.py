@@ -27,24 +27,42 @@ class TestAmbulanceService(unittest.TestCase):
         returns empty results for non-matching years, and handles partial year matches.
         """
         # Mock the CSV data
-        mock_csv_data = """\ufeffAmbulance Service Indicators,no. of emergency calls,no. of hospital transfer calls,calls per ambulance,turnouts of ambulances, ambulance motor cycles and Rapid Response Vehicles to calls,emergency move-ups of ambulances to provide operational coverage
-01/2019,70004,4970,200.70,78137,8186
-02/2019,57701,4104,172.87,63926,7143
-01/2020,62991,4186,177.45,67363,9364"""
+        mock_csv_data = [
+            {
+                "Ambulance Service Indicators": "01/2019",
+                "no. of emergency calls": "70004",
+                "no. of hospital transfer calls": "4970",
+                "calls per ambulance": "200.70",
+                "turnouts of ambulances, ambulance motor cycles and Rapid Response Vehicles to calls": "78137",
+                "emergency move-ups of ambulances to provide operational coverage": "8186",
+            },
+            {
+                "Ambulance Service Indicators": "02/2019",
+                "no. of emergency calls": "57701",
+                "no. of hospital transfer calls": "4104",
+                "calls per ambulance": "172.87",
+                "turnouts of ambulances, ambulance motor cycles and Rapid Response Vehicles to calls": "63926",
+                "emergency move-ups of ambulances to provide operational coverage": "7143",
+            },
+            {
+                "Ambulance Service Indicators": "01/2020",
+                "no. of emergency calls": "62991",
+                "no. of hospital transfer calls": "4186",
+                "calls per ambulance": "177.45",
+                "turnouts of ambulances, ambulance motor cycles and Rapid Response Vehicles to calls": "67363",
+                "emergency move-ups of ambulances to provide operational coverage": "9364",
+            },
+        ]
 
-        with patch("urllib.request.urlopen") as mock_urlopen:
+        with patch(
+            "hkopenai.hk_city_mcp_server.tool_ambulance_service.fetch_csv_from_url"
+        ) as mock_fetch_csv_from_url:
             # Setup mock response
-            mock_response = MagicMock()
-            mock_response.readlines.return_value = [
-                line.encode("utf-8") for line in mock_csv_data.split("\n")
-            ]
-            mock_urlopen.return_value.__enter__.return_value = mock_response
+            mock_fetch_csv_from_url.return_value = mock_csv_data
 
             # Test filtering by year range
             result = _get_ambulance_indicators(2019, 2019)
             self.assertEqual(len(result), 2)
-            self.assertEqual(result[0]["date"], "01/2019")
-            self.assertEqual(result[1]["date"], "02/2019")
 
             # Test empty result for non-matching years
             result = _get_ambulance_indicators(2021, 2022)

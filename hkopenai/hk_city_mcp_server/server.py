@@ -29,9 +29,7 @@ def main(host: str, port: int, sse: bool):
 
     if sse:
         server.run(transport="streamable-http", host=host, port=port)
-        print(
-            f"MCP Server started in SSE mode on port {port}, bound to {host}"
-        )
+        print(f"MCP Server started in SSE mode on port {port}, bound to {host}")
     else:
         server.run()
         print("MCP Server running in stdio mode")
