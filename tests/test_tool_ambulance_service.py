@@ -7,8 +7,8 @@ This module contains unit tests for fetching and filtering ambulance service dat
 import unittest
 from unittest.mock import patch, MagicMock
 
-from hkopenai.hk_city_mcp_server.tool_ambulance_service import _get_ambulance_indicators
-from hkopenai.hk_city_mcp_server.tool_ambulance_service import register
+from hkopenai.hk_city_mcp_server.tools.ambulance_service import _get_ambulance_indicators
+from hkopenai.hk_city_mcp_server.tools.ambulance_service import register
 
 
 class TestAmbulanceService(unittest.TestCase):
@@ -55,7 +55,7 @@ class TestAmbulanceService(unittest.TestCase):
         ]
 
         with patch(
-            "hkopenai.hk_city_mcp_server.tool_ambulance_service.fetch_csv_from_url"
+            "hkopenai.hk_city_mcp_server.tools.ambulance_service.fetch_csv_from_url"
         ) as mock_fetch_csv_from_url:
             # Setup mock response
             mock_fetch_csv_from_url.return_value = mock_csv_data
@@ -104,7 +104,7 @@ class TestAmbulanceService(unittest.TestCase):
 
         # Call the decorated function and verify it calls _get_ambulance_indicators
         with patch(
-            "hkopenai.hk_city_mcp_server.tool_ambulance_service._get_ambulance_indicators"
+            "hkopenai.hk_city_mcp_server.tools.ambulance_service._get_ambulance_indicators"
         ) as mock_get_ambulance_indicators:
             decorated_function(start_year=2018, end_year=2019)
             mock_get_ambulance_indicators.assert_called_once_with(2018, 2019)

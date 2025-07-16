@@ -18,7 +18,7 @@ class TestApp(unittest.TestCase):
     """
 
     @patch("hkopenai.hk_city_mcp_server.server.FastMCP")
-    @patch("hkopenai.hk_city_mcp_server.tool_ambulance_service.register")
+    @patch("hkopenai.hk_city_mcp_server.tools.ambulance_service.register")
     def test_server(self, mock_register, mock_fastmcp):
         """
         Test the creation of the MCP server and tool registration.
