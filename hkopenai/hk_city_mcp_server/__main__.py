@@ -6,7 +6,7 @@ It handles command-line arguments and initiates the main server functionality.
 """
 
 from hkopenai_common.cli_utils import cli_main
-from .server import main
+from . import server
 
 if __name__ == "__main__":
-    cli_main(main, "HK City MCP Server")
+    cli_main(server, "HK City MCP Server")
