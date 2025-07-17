@@ -7,8 +7,10 @@ This module contains unit tests for fetching and filtering ambulance service dat
 import unittest
 from unittest.mock import patch, MagicMock
 
-from hkopenai.hk_city_mcp_server.tools.ambulance_service import _get_ambulance_indicators
-from hkopenai.hk_city_mcp_server.tools.ambulance_service import register
+from hkopenai.hk_city_mcp_server.tools.ambulance_service import (
+    _get_ambulance_indicators,
+    register,
+)
 
 
 class TestAmbulanceService(unittest.TestCase):
@@ -57,7 +59,7 @@ class TestAmbulanceService(unittest.TestCase):
         with patch(
             "hkopenai.hk_city_mcp_server.tools.ambulance_service.fetch_csv_from_url"
         ) as mock_fetch_csv_from_url:
-            # Setup mock response
+            # Setup mock response for successful data fetching
             mock_fetch_csv_from_url.return_value = mock_csv_data
 
             # Test filtering by year range
@@ -71,6 +73,11 @@ class TestAmbulanceService(unittest.TestCase):
             # Test partial year match
             result = _get_ambulance_indicators(2019, 2020)
             self.assertEqual(len(result), 3)
+
+            # Test error handling when fetch_csv_from_url returns an error
+            mock_fetch_csv_from_url.return_value = {"error": "CSV fetch failed"}
+            result = _get_ambulance_indicators(2019, 2019)
+            self.assertEqual(result, {'error': 'CSV fetch failed'})
 
     def test_register_tool(self):
         """

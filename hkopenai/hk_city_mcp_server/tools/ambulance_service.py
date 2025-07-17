@@ -52,6 +52,10 @@ def _get_ambulance_indicators(
     """
     url = "http://www.hkfsd.gov.hk/datagovhk/datasets/Ambulance_Service_Indicators_eng.csv"
     data = fetch_csv_from_url(url)
+
+    if "error" in data:
+        return data
+
     filtered_data = []
 
     for row in data:
